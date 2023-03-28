@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 const app = express();
 const { Server } = require("socket.io");
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: ['http://localhost:3000', 'https://pointless-humor.surge.sh'] }));
 app.use(express.json());
 
 const server = http.createServer(app);
@@ -38,7 +38,7 @@ function sendEmailInvitation(recipient) {
       to: recipient.to,
       subject: "Invite to the account!",
       html: `<p>User ${recipient.from} invite your to the account: '${recipient.accountName}'! You can find an account by id: '<b>${recipient.accountId}</b>'</p>
-        <a href="http://localhost:3000" target="_blank">Link</a>`,
+        <a href="https://pointless-humor.surge.sh" target="_blank">Link</a>`,
     };
 
     transporter.sendMail(mailOptions, (err) => {
@@ -49,7 +49,7 @@ function sendEmailInvitation(recipient) {
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: ["https://pointless-humor.surge.sh"],
     credentials: true,
   },
 });
