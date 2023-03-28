@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 const app = express();
 const { Server } = require("socket.io");
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 const server = http.createServer(app);
@@ -14,14 +14,11 @@ const PORT = 7000;
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
 app.post("/invite-user", async (req, res) => {
-  console.log(req.body, "invite user");
-
   try {
     await sendEmailInvitation(req.body);
 
     res.send({ status: "SUCCESS" });
   } catch (error) {
-    console.log(error);
     res.send({ status: "FAILED" });
   }
 });
@@ -60,10 +57,7 @@ const io = new Server(server, {
 let roomId;
 
 io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`);
-
   socket.on("join_account", (accountId) => {
-    console.log(`Account ID ${accountId}`);
     roomId = accountId;
     socket.join(roomId);
 
